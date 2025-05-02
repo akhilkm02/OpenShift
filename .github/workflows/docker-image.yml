@@ -10,6 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Debug files
+      run: |
+        ls -la
+        ls -la target/
+    
     - name: Checkout source
       uses: actions/checkout@v3
 
