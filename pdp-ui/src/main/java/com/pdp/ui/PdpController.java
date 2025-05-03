@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class PdpController {
     @GetMapping("/greeting")
     public String getGreetings(){
-        return "Have a good day ! v4";
+        return "Have a good day !";
     }
 }
