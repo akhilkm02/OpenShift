@@ -45,25 +45,24 @@ jobs:
                 ${{ secrets.DOCKERHUB_USERNAME }}/pdp-ui:latest
                 ${{ secrets.DOCKERHUB_USERNAME }}/pdp-ui:${{ github.sha }}
             
-    deploy:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v3
-              
-            - name: Login to OpenShift
+        - name: Install OpenShift CLI
               run: |
-                echo "$OPENSHIFT_TOKEN" | oc login --token=$(cat -) --server="$OPENSHIFT_SERVER"
+                curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz
+                tar -xvf openshift-client-linux.tar.gz
+                sudo mv oc kubectl /usr/local/bin          
+                    - name: Login to OpenShift
+                      run: |
+                        echo "$OPENSHIFT_TOKEN" | oc login --token=$(cat -) --server="$OPENSHIFT_SERVER"
 
-              env:
-                OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
-                OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER }}
+                      env:
+                        OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
+                        OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER }}
 
-            - name: Set new image for deployment
-              run: |
-                oc set image deployment/pdp-ui pdp-ui=docker.io/akhilkm02/pdp-ui:latest -n akhilkm02-dev
+        - name: Set new image for deployment
+          run: |
+            oc set image deployment/pdp-ui pdp-ui=docker.io/akhilkm02/pdp-ui:latest -n akhilkm02-dev
 
-            - name: Force rollout restart (optional if using unique image tags)
-              run: |
-                oc rollout restart deployment/pdp-ui -n akhilkm02-dev          
+        - name: Force rollout restart (optional if using unique image tags)
+          run: |
+            oc rollout restart deployment/pdp-ui -n akhilkm02-dev          
                 
