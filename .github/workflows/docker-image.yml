@@ -60,7 +60,7 @@ jobs:
 
       - name: Set new image for deployment
         run: |
-          oc set image deployment/pdp-ui pdp-ui=docker.io/${{ secrets.DOCKERHUB_USERNAME }}/pdp-ui:latest -n akhilkm02-dev
+          oc set image deployment/pdp-ui pdp-ui=docker.io/${{ secrets.DOCKERHUB_USERNAME }}/pdp-ui:${{ github.sha }} -n akhilkm02-dev
 
       - name: Force rollout restart
         run: |
