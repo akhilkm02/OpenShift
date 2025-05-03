@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pdp-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pdp-ui
+  template:
+    metadata:
+      labels:
+        app: pdp-ui
+    spec:
+      containers:
+        - name: pdp-ui
+          image: akhilkm02/pdp-ui:latest  # Replace with your image path
+          ports:
+            - containerPort: 8080

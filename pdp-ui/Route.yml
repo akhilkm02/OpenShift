@@ -1,0 +1,12 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: pdp-ui-route
+spec:
+  to:
+    kind: Service
+    name: pdp-ui-service
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge  # Optional, use if HTTPS is required
